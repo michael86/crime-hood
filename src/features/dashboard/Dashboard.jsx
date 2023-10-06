@@ -1,4 +1,4 @@
-import Globe from "../globe/Globe";
+import Globe from "../globe/GlobeContainer";
 
 const Dashboard = () => {
   return (
