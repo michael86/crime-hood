@@ -1,9 +1,9 @@
 import { LatLngExpression } from "leaflet";
 import { useState } from "react";
 import { MapContainer } from "react-leaflet";
-import GlobeElements from "./GlobeElements";
+import GlobeElements from "./MapMarkers";
 
-const GlobeContainer = () => {
+const Map = () => {
   const DEFAULT_GEO: LatLngExpression = [51.505, -0.09];
 
   const [clicked, setClicked] = useState<boolean>(false);
@@ -28,4 +28,4 @@ const GlobeContainer = () => {
   );
 };
 
-export default GlobeContainer;
+export default Map;

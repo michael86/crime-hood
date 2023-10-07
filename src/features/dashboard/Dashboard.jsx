@@ -1,17 +1,9 @@
-import Globe from "../globe/GlobeContainer";
+import Map from "../map/MapContainer";
 
 const Dashboard = () => {
   return (
     <main>
-      <form action="submit">
-        <input
-          type="text"
-          name="search"
-          id="search"
-          placeholder="Enter location name or latitude and longitude"
-        />
-        <Globe />
-      </form>
+      <Map />
     </main>
   );
 };

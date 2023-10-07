@@ -1,13 +1,13 @@
 import { TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { LatLngExpression } from "leaflet";
 import { Navigator } from "./interfaces";
-import { useState } from "react";
-import "./globe.css";
+import data from "./test_data.json";
+import "./map.css";
 
 interface Props {
   clicked: boolean;
 }
-
+console.log(data);
 const GlobeElements: React.FC<Props> = ({ clicked }) => {
   /**Child component allowing use of ReactContext contianed within the useMap wrapper
    * This component will allow us to manipulate the map without causing a complete rerender*/
