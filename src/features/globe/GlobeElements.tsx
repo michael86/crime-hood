@@ -2,6 +2,7 @@ import { TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { LatLngExpression } from "leaflet";
 import { Navigator } from "./interfaces";
 import { useState } from "react";
+import "./globe.css";
 
 interface Props {
   clicked: boolean;
@@ -10,8 +11,6 @@ interface Props {
 const GlobeElements: React.FC<Props> = ({ clicked }) => {
   /**Child component allowing use of ReactContext contianed within the useMap wrapper
    * This component will allow us to manipulate the map without causing a complete rerender*/
-
-  const [userGeo, setUserGeo] = useState<LatLngExpression>();
 
   const DEFAULT_GEO: LatLngExpression = [51.505, -0.09];
   const map = useMap();
@@ -24,7 +23,6 @@ const GlobeElements: React.FC<Props> = ({ clicked }) => {
       ];
 
       map.flyTo(geo, map.getZoom());
-      //   setUserGeo(geo);
     };
     navigator.geolocation && navigator.geolocation.getCurrentPosition(success);
   };
@@ -38,7 +36,7 @@ const GlobeElements: React.FC<Props> = ({ clicked }) => {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       <Marker position={DEFAULT_GEO}>
-        <Popup>Crime happened here</Popup>
+        <Popup className="popup--text">Crime happened here</Popup>
       </Marker>
     </>
   );
