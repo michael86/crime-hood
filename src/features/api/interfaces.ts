@@ -1,5 +1,7 @@
+import { LatLngExpression } from "leaflet";
+
 export interface Api {
-  locations: [number, number];
+  locations: LatLngExpression;
   crimes: Crimes[] | [];
 }
 
