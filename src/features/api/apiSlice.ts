@@ -1,11 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import data from "./test_data.json";
 import { Api, Crimes } from "./interfaces";
-import { LatLngExpression } from "leaflet";
 
 const initialState: Api = {
-  locations: [51.505, -0.09],
-  crimes: data,
+  locations: [],
+  crimes: [],
 };
 
 export const ApiSlice = createSlice({
@@ -16,7 +15,7 @@ export const ApiSlice = createSlice({
     setCrimes: (state, action: PayloadAction<[Crimes]>) => {
       state.crimes = action.payload;
     },
-    setLocations: (state, action: PayloadAction<LatLngExpression>) => {
+    setLocations: (state, action: PayloadAction<[number, number]>) => {
       state.locations = action.payload;
     },
   },

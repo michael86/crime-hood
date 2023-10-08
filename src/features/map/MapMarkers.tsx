@@ -1,14 +1,33 @@
 import { TileLayer, Marker, Popup } from "react-leaflet";
 
 import "./map.css";
-import { useAppSelector } from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import formatDateTime from "../../app/utils/dateTime";
+import { useEffect } from "react";
+import axios from "axios";
+import { setCrimes } from "../api/apiSlice";
 
 const MapMarkers: React.FC = () => {
-  /**Child component allowing use of ReactContext contianed within the useMap wrapper
-   * This component will allow us to manipulate the map without causing a complete rerender*/
-
+  const dispatch = useAppDispatch();
   const { crimes } = useAppSelector((state) => state.api);
+  const { locations } = useAppSelector((state) => state.api);
+
+  const handleError = () => {
+    console.log("error");
+  };
+
+  useEffect(() => {
+    locations.length &&
+      axios
+        .get(`https://data.police.uk/api/stops-street?lat=${locations[0]}&lng=${locations[1]}`)
+        .then((res) => {
+          if (res.status !== 200) {
+            handleError();
+            return;
+          }
+          dispatch(setCrimes(res.data));
+        });
+  }, [locations]);
 
   return (
     <>
