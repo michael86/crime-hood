@@ -7,41 +7,33 @@ import { Coords, Error } from "./interfaces";
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
-export const usePosition = () => {
+export function useCurrentPosition() {
   const [position, setPosition] = useState<Coords>();
   const [error, setError] = useState<Error>();
 
-  const onChange = ({ coords }: Coords) => {
-    setPosition({
-      latitude: coords.latitude,
-      longitude: coords.longitude,
-    });
-  };
-
-  const _onError = (error: Error) => {
-    setError({ ...error });
-  };
-
-  const _success = (coords: Coords) => {
-    console.log(coords);
-  };
-
   useEffect(() => {
-    const location = navigator.geolocation.getCurrentPosition(_success, _onError, {
-      enableHighAccuracy: true,
-    });
+    let canceled = false;
 
-    console.log(location);
-    if (!navigator.geolocation) {
-      console.log("geo not active");
-      setError({ message: "geo not active", PERMISSION_DENIED: 1 });
-      return;
-    }
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        if (!canceled) {
+          const { latitude, longitude } = position.coords;
 
-    const watcher = navigator.geolocation.watchPosition(onChange, _onError);
-    return () => navigator.geolocation.clearWatch(watcher);
+          setPosition({ latitude, longitude });
+        }
+      },
+      (error) => {
+        if (!canceled) {
+          setError(error);
+        }
+      },
+      { enableHighAccuracy: true, maximumAge: 0 }
+    );
+
+    return () => {
+      canceled = true;
+    };
   }, []);
 
-  console.log(position);
-  return { ...position, error };
-};
+  return [position, error];
+}

@@ -3,7 +3,8 @@ export interface Navigator {
 }
 
 export interface Coords {
-  coords: { latitude: number; longitude: number };
+  latitude: number;
+  longitude: number;
 }
 
 export interface Error {

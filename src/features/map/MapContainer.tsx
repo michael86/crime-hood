@@ -3,15 +3,16 @@ import MapMarkers from "./MapMarkers";
 import { MapContainer } from "react-leaflet";
 import { LatLngExpression } from "leaflet";
 import { useAppSelector } from "../../app/hooks";
+import { Locations } from "../api/interfaces";
+import { Coords } from "../../app/interfaces";
 
 const Map = () => {
-  const { locations } = useAppSelector((state) => state.api);
-  const DEFAULT_GEO: LatLngExpression = [51.505, -0.09];
+  const { latitude, longitude }: Coords = useAppSelector((state) => state.api.locations);
 
   return (
     <>
       <MapContainer
-        center={locations.length ? [locations[0], locations[1]] : DEFAULT_GEO}
+        center={[latitude, longitude]}
         zoom={13}
         scrollWheelZoom={true}
         style={{ height: "750px" }}

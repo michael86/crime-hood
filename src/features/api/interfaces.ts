@@ -1,6 +1,11 @@
 export interface Api {
-  locations: [number, number] | [];
+  locations: Locations;
   crimes: Crimes[] | [];
+}
+
+export interface Locations {
+  latitude: number;
+  longitude: number;
 }
 
 export interface Crimes {
