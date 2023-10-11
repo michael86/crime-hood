@@ -5,22 +5,21 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import formatDateTime from "../../app/utils/dateTime";
 import { useEffect } from "react";
 import axios from "axios";
-import { setCrimes } from "../api/apiSlice";
-import { Coords } from "../../app/interfaces";
+import { setCrimes } from "../slices/crimeSlice";
 
 const MapMarkers: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { crimes } = useAppSelector((state) => state.api);
-  const { latitude, longitude }: Coords = useAppSelector((state) => state.api.locations);
+  const crimes = useAppSelector((state) => state.crimes);
+  const location = useAppSelector((state) => state.locations);
 
   const handleError = () => {
     console.log("error");
   };
 
   useEffect(() => {
-    latitude & longitude &&
+    location &&
       axios
-        .get(`https://data.police.uk/api/stops-street?lat=${latitude}&lng=${longitude}`)
+        .get(`https://data.police.uk/api/stops-street?lat=${location[0][0]}&lng=${location[0][1]}`)
         .then((res) => {
           if (res.status !== 200) {
             handleError();
@@ -28,7 +27,7 @@ const MapMarkers: React.FC = () => {
           }
           dispatch(setCrimes(res.data));
         });
-  }, [latitude, longitude]);
+  }, [location]);
 
   return (
     <>

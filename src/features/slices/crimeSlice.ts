@@ -1,12 +1,6 @@
-export interface Api {
-  locations: Locations;
-  crimes: Crimes[] | [];
-}
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export interface Locations {
-  latitude: number;
-  longitude: number;
-}
+type Interface = Crimes[] | [];
 
 export interface Crimes {
   age_range: string | null;
@@ -26,3 +20,19 @@ export interface Crimes {
   self_defined_ethnicity: string | null;
   type: string | null;
 }
+const initialState: Interface = [];
+
+export const CrimesSlice = createSlice({
+  name: "crime",
+  initialState,
+
+  reducers: {
+    setCrimes: (state, action: PayloadAction<Crimes[]>) => {
+      state = action.payload;
+    },
+  },
+});
+
+export const { setCrimes } = CrimesSlice.actions;
+
+export default CrimesSlice.reducer;

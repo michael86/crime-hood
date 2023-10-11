@@ -3,16 +3,15 @@ import { useMap } from "react-leaflet";
 import { useAppSelector } from "../../app/hooks";
 
 import { LatLngExpression, Map } from "leaflet";
-import { Coords } from "../../app/interfaces";
 
 const UserLocation = () => {
   const [warning, setWarning] = useState<Boolean>(false);
-  const { latitude, longitude }: Coords = useAppSelector((state) => state.api.locations);
+  const location = useAppSelector((state) => state.locations);
   const map: Map = useMap();
 
   useEffect(() => {
-    latitude & longitude && map.flyTo([latitude, longitude] as LatLngExpression, 13);
-  }, [latitude, longitude]);
+    location && map.flyTo(location[0] as LatLngExpression, 13);
+  }, [location]);
 
   return !warning ? (
     <button

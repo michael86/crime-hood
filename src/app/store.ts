@@ -1,10 +1,12 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
 
-import ApiReducer from "../features/api/apiSlice";
+import CrimesReducer from "../features/slices/crimeSlice";
+import LocationsReducer from "../features/slices/locationSlice";
 
 export const store = configureStore({
   reducer: {
-    api: ApiReducer,
+    locations: LocationsReducer,
+    crimes: CrimesReducer,
   },
 });
 

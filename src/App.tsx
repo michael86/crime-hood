@@ -1,19 +1,29 @@
 import Dashboard from "./features/dashboard/Dashboard";
-import { useAppDispatch, useCurrentPosition } from "./app/hooks";
-import { setLocations } from "./features/api/apiSlice";
-import { Coords } from "./app/interfaces";
+import { useEffect } from "react";
+import { useAppDispatch, useAppSelector, useCurrentPosition } from "./app/hooks";
+import { Locations, setLocations } from "./features/slices/locationSlice";
 
 function App() {
   const dispatch = useAppDispatch();
 
-  const [position, error] = useCurrentPosition();
+  const { position, error } = useCurrentPosition();
+  const locations = useAppSelector((state) => state.locations);
 
-  !error && dispatch(setLocations({ ...(position as Coords) }));
+  console.log(position);
+  useEffect(() => {
+    if (error === undefined && position) {
+      const copy = [...locations];
+      copy[0] = position;
+      console.log("setting position", copy);
+      dispatch(setLocations(copy as Locations));
+    }
+  }, [position]);
 
+  console.log(locations);
   return (
     <>
       <h1>Crime Hood</h1>
-      <Dashboard />
+      {/* <Dashboard /> */}
     </>
   );
 }

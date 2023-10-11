@@ -1,18 +1,20 @@
 import UserLocation from "./UserLocation";
 import MapMarkers from "./MapMarkers";
 import { MapContainer } from "react-leaflet";
-import { LatLngExpression } from "leaflet";
+
 import { useAppSelector } from "../../app/hooks";
-import { Locations } from "../api/interfaces";
-import { Coords } from "../../app/interfaces";
+
+import { useEffect } from "react";
 
 const Map = () => {
-  const { latitude, longitude }: Coords = useAppSelector((state) => state.api.locations);
+  const locations = useAppSelector((state) => state.locations);
 
-  return (
+  useEffect(() => {}, [locations]);
+
+  return locations ? (
     <>
       <MapContainer
-        center={[latitude, longitude]}
+        center={[locations[0][0], locations[0][1]]}
         zoom={13}
         scrollWheelZoom={true}
         style={{ height: "750px" }}
@@ -21,7 +23,7 @@ const Map = () => {
         <MapMarkers />
       </MapContainer>
     </>
-  );
+  ) : null;
 };
 
 export default Map;
