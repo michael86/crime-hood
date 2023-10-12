@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useAppDispatch, useCurrentPosition } from "./app/hooks";
-import { Locations, setLocations } from "./features/slices/locationSlice";
+import { setLocations } from "./features/slices/locationSlice";
 import Dashboard from "./features/dashboard/Dashboard";
 
 function App() {
@@ -10,7 +10,7 @@ function App() {
 
   useEffect(() => {
     if (error === undefined && position) {
-      dispatch(setLocations([position] as Locations));
+      dispatch(setLocations([position]));
     }
   }, [position]);
 
