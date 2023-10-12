@@ -29,6 +29,7 @@ export const CrimesSlice = createSlice({
   reducers: {
     setCrimes: (state, action: PayloadAction<Crimes[]>) => {
       state = action.payload;
+      return state;
     },
   },
 });

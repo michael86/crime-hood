@@ -1,10 +1,10 @@
-import { TileLayer, Marker, Popup } from "react-leaflet";
-
 import "./map.css";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
+
+import axios from "axios";
 import formatDateTime from "../../app/utils/dateTime";
 import { useEffect } from "react";
-import axios from "axios";
+import { TileLayer, Marker, Popup } from "react-leaflet";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { setCrimes } from "../slices/crimeSlice";
 
 const MapMarkers: React.FC = () => {
@@ -25,6 +25,7 @@ const MapMarkers: React.FC = () => {
             handleError();
             return;
           }
+          console.log(res.data);
           dispatch(setCrimes(res.data));
         });
   }, [location]);

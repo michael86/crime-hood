@@ -10,10 +10,8 @@ export const LocationsSlice = createSlice({
 
   reducers: {
     setLocations: (state, action: PayloadAction<Locations>) => {
-      console.log(state);
-      console.log(action.payload);
       state = action.payload;
-      console.log(state);
+      return state;
     },
   },
 });
