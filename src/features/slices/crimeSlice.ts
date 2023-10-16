@@ -2,10 +2,26 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 type Interface = {
   arrests: Arrests[] | [];
-  searches: Arrests[] | [];
+  searches: Searches[] | [];
 };
 
 export interface Arrests {
+  category: string;
+  context: string;
+  id: number;
+  location: {
+    latitude: string;
+    street: { id: number; name: string };
+    longitude: string;
+  };
+  location_subtype: string;
+  location_type: string;
+  month: string;
+  outcome_status: { category: string; date: string };
+  persistent_id: string;
+}
+
+export interface Searches {
   age_range: string | null;
   datetime: string;
   gender: string | null;
@@ -38,7 +54,7 @@ export const CrimesSlice = createSlice({
       state.arrests = action.payload;
       return state;
     },
-    setSearches: (state, action: PayloadAction<Arrests[]>) => {
+    setSearches: (state, action: PayloadAction<Searches[]>) => {
       state.searches = action.payload;
       return state;
     },
