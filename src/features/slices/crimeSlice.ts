@@ -1,14 +1,21 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-type Interface = Crimes[] | [];
+type Interface = {
+  arrests: Arrests[] | [];
+  searches: Arrests[] | [];
+};
 
-export interface Crimes {
+export interface Arrests {
   age_range: string | null;
   datetime: string;
   gender: string | null;
   involved_person: boolean | null;
   legislation: string | null;
-  location: { latitude: string; longitude: string; street: { id: number; name: string } };
+  location: {
+    latitude: string;
+    longitude: string;
+    street: { id: number; name: string };
+  };
   object_of_search: null | string | boolean;
   officer_defined_ethnicity: string | null;
   operation: boolean | null;
@@ -20,20 +27,24 @@ export interface Crimes {
   self_defined_ethnicity: string | null;
   type: string | null;
 }
-const initialState: Interface = [];
+const initialState: Interface = { arrests: [], searches: [] };
 
 export const CrimesSlice = createSlice({
   name: "crime",
   initialState,
 
   reducers: {
-    setCrimes: (state, action: PayloadAction<Crimes[]>) => {
-      state = action.payload;
+    setArrests: (state, action: PayloadAction<Arrests[]>) => {
+      state.arrests = action.payload;
+      return state;
+    },
+    setSearches: (state, action: PayloadAction<Arrests[]>) => {
+      state.searches = action.payload;
       return state;
     },
   },
 });
 
-export const { setCrimes } = CrimesSlice.actions;
+export const { setArrests, setSearches } = CrimesSlice.actions;
 
 export default CrimesSlice.reducer;
