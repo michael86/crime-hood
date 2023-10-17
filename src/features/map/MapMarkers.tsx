@@ -51,8 +51,11 @@ const MapMarkers: React.FC = () => {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      {[...searches, ...arrests].map((payload, i) => (
-        <Marker payload={payload} key={i} />
+      {searches.map((payload, i) => (
+        <Marker payload={{ searches: payload }} key={i} />
+      ))}
+      {arrests.map((payload, i) => (
+        <Marker payload={{ arrests: payload }} key={i} />
       ))}
     </>
   );
