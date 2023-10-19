@@ -18,3 +18,7 @@ export interface Error {
 
   TIMEOUT?: number;
 }
+
+export interface User {
+  locationShared?: boolean;
+}
