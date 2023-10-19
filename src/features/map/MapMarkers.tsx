@@ -11,17 +11,15 @@ import Marker from "./Marker";
 
 const MapMarkers: React.FC = () => {
   const dispatch = useAppDispatch();
+
   const { searches, arrests } = useAppSelector((state) => state.crimes);
   const location = useAppSelector((state) => state.locations);
-
-  const handleError = () => {
-    console.log("error");
-  };
+  const [lat, lng] = [...location[0]];
 
   useEffect(() => {
-    if (!location) return;
-
-    const [lat, lng] = [location[0][0], location[0][1]];
+    const handleError = () => {
+      console.log("error");
+    };
 
     const requests = [getStopSearches(lat, lng), getCrimes(lat, lng)].map(
       (url) => axios.get(url)

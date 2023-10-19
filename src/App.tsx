@@ -1,25 +1,21 @@
-import { useEffect } from "react";
+import React from "react";
 import { useAppDispatch, useCurrentPosition } from "./app/hooks";
 import { setLocations } from "./features/slices/locationSlice";
 import Dashboard from "./features/dashboard/Dashboard";
 
-function App() {
+const App: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const { position, error } = useCurrentPosition();
 
-  useEffect(() => {
-    if (error === undefined && position) {
-      dispatch(setLocations([position]));
-    }
-  }, [position]);
+  error === undefined && position && dispatch(setLocations([position]));
 
   return (
     <>
       <h1>Crime Hood</h1>
-      <Dashboard />
+      {position || error ? <Dashboard /> : "getting position"}
     </>
   );
-}
+};
 
 export default App;
