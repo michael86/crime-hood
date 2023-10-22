@@ -28,7 +28,7 @@ const MapMarkers: React.FC = () => {
     axios.all(requests).then((response) => {
       response.forEach((res) => {
         if (res.status !== 200) return;
-        const { data } = res;
+
         const { url } = res.config;
 
         if (res.status !== 200) {
@@ -41,7 +41,7 @@ const MapMarkers: React.FC = () => {
           : dispatch(setSearches(res.data));
       });
     });
-  }, [location]);
+  }, [location, dispatch, lat, lng]);
 
   return (
     <>

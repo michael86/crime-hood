@@ -1,8 +1,7 @@
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import type { RootState, AppDispatch } from "./store";
 import { useState, useEffect } from "react";
-import { Coords, Error } from "./interfaces";
-import { LatLngExpression } from "leaflet";
+import { Error } from "./interfaces";
 
 // Use throughout your app instead of plain `useDispatch` and `useSelector`
 export const useAppDispatch = () => useDispatch<AppDispatch>();
