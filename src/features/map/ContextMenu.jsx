@@ -14,17 +14,14 @@ const ContextMenu = () => {
 
   const goHome = () => {
     const pan = currentLocation.position || [locations[0][0], locations[0][1]];
-
     map.panTo(pan);
   };
 
   const ZoomOut = () => map.zoomOut();
   const ZoomIn = () => map.zoomIn();
 
-  const updateLocation = ({ latlng }) => {
-    console.log(latlng);
+  const updateLocation = ({ latlng }) =>
     latlng && dispatch(setLocations([[latlng.lat, latlng.lng]]));
-  };
 
   map.contextmenu.removeAllItems();
 
