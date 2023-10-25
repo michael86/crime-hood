@@ -9,21 +9,23 @@ const SearchPopup = ({ payload }: Props) => {
   return (
     <ul>
       {payload?.age_range && (
-        <li className="popup--list-item">Age: {payload.age_range}</li>
+        <li className="popup--list-item">Age: {payload?.age_range}</li>
       )}
       {payload?.datetime && (
-        <li className="popup--list-item">Date: {payload.datetime}</li>
+        <li className="popup--list-item">Date: {payload?.datetime}</li>
       )}
       {payload?.gender && (
-        <li className="popup--list-item">Gender: {payload.gender}</li>
+        <li className="popup--list-item">Gender: {payload?.gender}</li>
       )}
       {payload?.involved_person && (
         <li className="popup--list-item">
-          Person invloved: {payload.involved_person}
+          Person invloved: {payload?.involved_person}
         </li>
       )}
       {payload?.legislation && (
-        <li className="popup--list-item">Legislation: {payload.legislation}</li>
+        <li className="popup--list-item">
+          Legislation: {payload?.legislation}
+        </li>
       )}
       {payload?.location?.street?.name && (
         <li className="popup--list-item">
