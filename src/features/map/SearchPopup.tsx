@@ -1,10 +1,6 @@
-import { Searches } from "../slices/crimeSlice";
+import { SearchPopupProps } from "../../interfaces";
 
-interface Props {
-  payload: Searches;
-}
-
-const SearchPopup = ({ payload }: Props) => {
+const SearchPopup = ({ payload }: SearchPopupProps) => {
   console.log("search payload", payload);
   return (
     <ul>

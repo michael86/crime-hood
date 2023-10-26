@@ -1,13 +1,8 @@
-import React from "react";
 import { Marker as M, Popup } from "react-leaflet";
-import { Arrests, Searches } from "../slices/crimeSlice";
+import { MarkerProps } from "../../interfaces";
 import { icon } from "leaflet";
 import ArrestPopup from "./ArrestPopup";
 import SearchPopup from "./SearchPopup";
-
-interface Props {
-  payload: { arrests?: Arrests; searches?: Searches };
-}
 
 const handcuff = icon({
   iconUrl: "handcuff.png",
@@ -22,7 +17,7 @@ const magnifying = icon({
   popupAnchor: [0, -32],
 });
 
-const Marker = ({ payload }: Props) => {
+const Marker = ({ payload }: MarkerProps) => {
   const data = payload.arrests || payload.searches!;
 
   const icon = payload.arrests ? handcuff : magnifying;

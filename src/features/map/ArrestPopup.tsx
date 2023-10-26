@@ -1,10 +1,6 @@
-import { Arrests } from "../slices/crimeSlice";
+import { ArrestPopupProps } from "../../interfaces";
 
-interface Props {
-  payload: Arrests;
-}
-
-const ArrestPopup = ({ payload }: Props) => {
+const ArrestPopup = ({ payload }: ArrestPopupProps) => {
   console.log("arrest payload", payload.month);
   return (
     <>

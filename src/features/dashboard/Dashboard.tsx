@@ -3,26 +3,7 @@ import Map from "../map/MapContainer";
 import axios from "axios";
 import { useAppDispatch } from "../../app/hooks";
 import { setLocations } from "../slices/locationSlice";
-
-interface GeoCodeData {
-  boundingbox: [string];
-  class: string;
-  display_name: string;
-  importance: number;
-  lat: string;
-  licence: string;
-  lon: string;
-  osm_id: number;
-  osm_type: string;
-  place_id: number;
-  powered_by: string;
-  type: string;
-}
-
-interface GeoCodeRes {
-  status: number;
-  data: [GeoCodeData];
-}
+import { GeoCodeData, GeoCodeRes } from "../../interfaces";
 
 const Dashboard: React.FC = (): ReactElement => {
   const inputRef = useRef<HTMLInputElement>(null);

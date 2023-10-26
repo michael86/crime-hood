@@ -1,14 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { User } from "../../app/interfaces";
+import { UserInterface } from "../../interfaces";
 
-const initialState: User = {};
+const initialState: UserInterface = {};
 
 export const UserSlice = createSlice({
   name: "user",
   initialState,
 
   reducers: {
-    setLocationShared: (state, action: PayloadAction<User>) => {
+    setLocationShared: (state, action: PayloadAction<UserInterface>) => {
       state.locationShared = action.payload.locationShared;
       return state;
     },
