@@ -18,6 +18,7 @@ const Map = () => {
         scrollWheelZoom={true}
         style={{ height: `${height - 100}px` }}
         id="map"
+        // @ts-ignore
         contextmenu={true}
         contextmenuWidth={140}
       >
