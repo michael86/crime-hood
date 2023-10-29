@@ -1,43 +1,56 @@
 import { ArrestPopupProps } from "../../interfaces";
 
 const ArrestPopup = ({ payload }: ArrestPopupProps) => {
-  console.log("arrest payload", payload.month);
   return (
     <>
       <ul>
         {payload?.category && (
-          <li className="popup--list-item">Category: {payload.category}</li>
+          <li className="popup--list-item">
+            <span className="popup--title capitalize">Crime Type:</span> {payload.category}
+          </li>
         )}
+
         {payload?.context && (
-          <li className="popup--list-item">context: {payload.context}</li>
+          <li className="popup--list-item">
+            <span className="popup--title capitalize">Extra information:</span> {payload.context}
+          </li>
         )}
-        {payload?.id && <li className="popup--list-item">id: {payload.id}</li>}
+
         {payload?.location?.street && (
           <li className="popup--list-item">
-            street name: {payload.location.street.name}
+            <span className="popup--title capitalize">street name:</span>{" "}
+            {payload.location.street.name}
           </li>
         )}
-        {payload?.location_subtype && (
-          <li className="popup--list-item">
-            location subtype: {payload.location_subtype}
-          </li>
-        )}
+
         {payload?.location_type && (
           <li className="popup--list-item">
-            location type: {payload.location_type}
+            <span className="popup--title capitalize">Force:</span>{" "}
+            {payload.location_type.toLowerCase() === "force" ? "Standard" : "British Transport"}
           </li>
         )}
-        {payload?.month && (
-          <li className="popup--list-item">month: {payload?.month}</li>
+
+        {payload?.location_type?.toLowerCase() === "btp" && payload?.location_subtype && (
+          <li className="popup--list-item"> subtype: {payload.location_subtype}</li>
         )}
+
+        {payload?.month && (
+          <li className="popup--list-item">
+            <span className="popup--title capitalize">month:</span> {payload?.month}
+          </li>
+        )}
+
         {payload?.outcome_status?.category && (
           <li className="popup--list-item">
-            outcome category: {payload.outcome_status.category}
+            <span className="popup--title capitalize">outcome category:</span>{" "}
+            {payload.outcome_status.category}
           </li>
         )}
+
         {payload?.outcome_status?.date && (
           <li className="popup--list-item">
-            outcome date: {payload.outcome_status.date}
+            <span className="popup--title capitalize">outcome date:</span>{" "}
+            {payload.outcome_status.date}
           </li>
         )}
       </ul>
