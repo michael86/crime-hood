@@ -3,6 +3,8 @@ import { useRef, useState } from "react";
 
 import { GeoCodeData, GeoCodeRes } from "../../interfaces";
 import SearchCards from "./SearchCards";
+import "./search.css";
+import { getGeoCoords } from "./utils";
 
 const SearchField = () => {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -11,22 +13,11 @@ const SearchField = () => {
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const location = inputRef.current?.value;
-    if (!location?.length) return; //input field was empty so no need to get location geo
+    if (!inputRef.current?.value.length) return;
 
-    const res: GeoCodeRes = await axios.get(
-      `https://geocode.maps.co/search?q=${location.replace(" ", "+")}`
-    );
+    const validLocations = await getGeoCoords(inputRef.current?.value);
 
-    if (res.status !== 200) return; //Will add local state here to show error saying issue
-
-    if (!res.data.length) return; //same as above but for warning saying location not found
-
-    const validLocations = res.data.filter((entry) =>
-      entry.display_name.toLowerCase().includes("united kingdom")
-    );
-
-    if (!validLocations.length) return; //again show error stating that we're unable to find the lcoation
+    if (typeof validLocations === "string") return;
 
     setSearchLocations(validLocations);
   };
