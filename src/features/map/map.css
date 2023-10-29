@@ -1,3 +1,33 @@
+/*Overrule leaflets required css that sets the font family for some reason*/
+.leaflet-container {
+  font-family: inherit !important;
+}
+.leaflet-popup-content {
+  width: 500px !important;
+}
+
+/*End overrules*/
+.popup {
+  width: fit-content;
+}
+
 .popup--list-item {
   font-size: 1.6rem;
+  list-style: none;
+  line-height: 2.3rem;
+  letter-spacing: 0.12rem;
+}
+
+.popup--divider {
+  font-weight: 800;
+  text-decoration: underline;
+}
+
+.popup--divider:not(:first-of-type) {
+  margin-top: 0.5rem;
+}
+
+.popup--title {
+  font-weight: 800;
+  color: rgb(68, 62, 62);
 }

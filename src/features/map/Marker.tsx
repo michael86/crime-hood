@@ -23,11 +23,8 @@ const Marker = ({ payload }: MarkerProps) => {
   const icon = payload.arrests ? handcuff : magnifying;
 
   return (
-    <M
-      position={[+data.location?.latitude, +data.location?.longitude]}
-      icon={icon}
-    >
-      <Popup>
+    <M position={[+data.location?.latitude, +data.location?.longitude]} icon={icon}>
+      <Popup className="popup">
         {payload.arrests && <ArrestPopup payload={payload.arrests} />}
         {payload.searches && <SearchPopup payload={payload.searches} />}
       </Popup>

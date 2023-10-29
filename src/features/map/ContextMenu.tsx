@@ -2,6 +2,7 @@ import { useMap } from "react-leaflet";
 import { useAppDispatch, useAppSelector, useCurrentPosition } from "../../app/hooks";
 import { setLocations } from "../slices/locationSlice";
 import { LatLngExpression } from "leaflet";
+import { UpdateLocation } from "../../interfaces";
 
 const ContextMenu = () => {
   const map = useMap();
@@ -17,8 +18,7 @@ const ContextMenu = () => {
   const ZoomOut = () => map.zoomOut();
   const ZoomIn = () => map.zoomIn();
 
-  type Payload = { latlng: { lat: number; lng: number } };
-  const updateLocation = ({ latlng }: Payload) =>
+  const updateLocation = ({ latlng }: UpdateLocation) =>
     latlng && dispatch(setLocations([[latlng.lat, latlng.lng]]));
 
   // @ts-ignore

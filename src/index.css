@@ -7,6 +7,7 @@
 html {
   font-size: 10px;
   text-align: center;
+  font-family: "Libre Franklin", sans-serif;
 }
 
 body {
@@ -17,6 +18,10 @@ body {
 .center {
   margin: auto;
   width: 90%;
+}
+
+.capitalize {
+  text-transform: capitalize;
 }
 
 .search-location--container {

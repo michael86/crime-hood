@@ -98,3 +98,5 @@ export interface Searches {
 export interface SearchPopupProps {
   payload: Searches;
 }
+
+export type UpdateLocation = { latlng: { lat: number; lng: number } };
