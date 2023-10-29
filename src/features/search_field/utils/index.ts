@@ -6,15 +6,15 @@ export const getGeoCoords = async (value: string): Promise<string | GeoCodeData[
     `https://geocode.maps.co/search?q=${value.replace(" ", "+")}`
   );
 
-  if (res.status !== 200) return "status"; //Will add local state here to show error saying issue
+  if (res.status !== 200) return "status";
 
-  if (!res.data.length) return "not found"; //same as above but for warning saying location not found
+  if (!res.data.length) return "not found";
 
   const validLocations = res.data.filter((entry) =>
     entry.display_name.toLowerCase().includes("united kingdom")
   );
 
-  if (!validLocations.length) return "not found"; //again show error stating that we're unable to find the lcoation
+  if (!validLocations.length) return "not found";
 
   return validLocations;
 };
