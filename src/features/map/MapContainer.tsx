@@ -7,7 +7,7 @@ import useWindowDimensions, { useAppSelector } from "../../app/hooks";
 import { MapContainer } from "react-leaflet";
 
 const Map = () => {
-  const locations = useAppSelector((state) => state.locations);
+  const locations = useAppSelector((state) => state.locations.geoCoords);
   const { height } = useWindowDimensions();
 
   return locations ? (

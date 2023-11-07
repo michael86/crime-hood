@@ -13,7 +13,7 @@ const MapMarkers: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const { searches, arrests } = useAppSelector((state) => state.crimes);
-  const location = useAppSelector((state) => state.locations);
+  const location = useAppSelector((state) => state.locations.geoCoords);
   const [lat, lng] = [...location[0]];
 
   useEffect(() => {

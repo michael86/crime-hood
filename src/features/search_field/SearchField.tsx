@@ -6,7 +6,7 @@ import { getGeoCoords } from "./utils";
 
 const SearchField = () => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [searchLocations, setSearchLocations] = useState<GeoCodeData[]>();
+  const [searchLocations, setSearchLocations] = useState<GeoCodeData[]>([]);
   const [warning, setWarning] = useState<string | null>(null);
 
   const onSubmit = async (e: React.FormEvent) => {
@@ -23,7 +23,9 @@ const SearchField = () => {
 
     if (typeof validLocations === "string") {
       validLocations === "status"
-        ? setWarning("there seems to be an issue our end, please hold tight and try again later")
+        ? setWarning(
+            "there seems to be an issue our end, please hold tight and try again later"
+          )
         : setWarning("That locations wasn't found, are you sure it exists");
       return;
     }
@@ -34,7 +36,11 @@ const SearchField = () => {
   return (
     <form onSubmit={onSubmit}>
       <div className="input-container">
-        <input type={"text"} placeholder="Search for town or city" ref={inputRef} />
+        <input
+          type={"text"}
+          placeholder="Search for town or city"
+          ref={inputRef}
+        />
         <button type="submit">Search</button>
       </div>
       {warning && <h3 className="input-warning">{warning}</h3>}
@@ -42,7 +48,11 @@ const SearchField = () => {
       {searchLocations && (
         <div className="search-location--container">
           {searchLocations.map((location, i) => (
-            <SearchCards location={location} key={i} />
+            <SearchCards
+              location={location}
+              setSearchLocations={setSearchLocations}
+              key={i}
+            />
           ))}
         </div>
       )}

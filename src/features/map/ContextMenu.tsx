@@ -1,12 +1,16 @@
 import { useMap } from "react-leaflet";
-import { useAppDispatch, useAppSelector, useCurrentPosition } from "../../app/hooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+  useCurrentPosition,
+} from "../../app/hooks";
 import { setLocations } from "../slices/locationSlice";
 import { LatLngExpression } from "leaflet";
 import { UpdateLocation } from "../../interfaces";
 
 const ContextMenu = () => {
   const map = useMap();
-  const locations = useAppSelector((state) => state.locations);
+  const locations = useAppSelector((state) => state.locations.geoCoords);
   const currentLocation = useCurrentPosition();
   const dispatch = useAppDispatch();
 

@@ -1,1 +1,89 @@
+.input-container {
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+}
 
+.input-container input {
+  border: none;
+  font-size: 2rem;
+  background-color: rgb(219, 219, 219);
+  padding: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.5rem;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.search-location--container {
+  width: 90%;
+  max-width: 950px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.card--background {
+  background: linear-gradient(270deg, #001cff, #ff0000);
+  background-size: 400% 400%;
+
+  -webkit-animation: police 2s ease infinite;
+  -moz-animation: police 2s ease infinite;
+  animation: police 2s ease infinite;
+  padding: 0.5rem;
+  border-radius: 2rem;
+  margin-top: 1rem;
+}
+
+.card--background:last-of-type {
+  margin-bottom: 1rem;
+}
+
+.search-location--card {
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  min-height: 15rem;
+  background-color: #fff;
+  border-radius: 2rem;
+  font-size: 2rem;
+}
+
+.search-location--card:hover {
+  cursor: pointer;
+  background-color: rgb(219, 219, 219);
+}
+
+@-webkit-keyframes police {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+@-moz-keyframes police {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+@keyframes police {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
