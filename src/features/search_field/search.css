@@ -1,18 +1,51 @@
-.input-container {
+.search-form {
+  margin-top: 2rem;
   margin-bottom: 1rem;
+}
+
+.input-container {
   display: flex;
   flex-direction: column;
+  width: 80%;
+  margin: auto;
+  position: relative;
+}
+
+.input-container label {
+  position: absolute;
+  top: 0rem;
+  left: 0rem;
+  font-size: 2rem;
 }
 
 .input-container input {
   border: none;
-  font-size: 2rem;
-  background-color: rgb(219, 219, 219);
-  padding: 1rem;
+  border-bottom: 3px solid rgb(219, 219, 219);
+  font-size: 1.8rem;
+  padding-bottom: 0.5rem;
   font-weight: 600;
   letter-spacing: 0.5rem;
   text-align: center;
   margin-bottom: 1rem;
+  outline: none;
+}
+
+.input-container input:focus ~ label,
+.input-container input:not(:placeholder-shown) ~ label {
+  top: -1.8rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  font-size: 1.5rem;
+  transition: top 0.5s ease-in-out, font-size 0.5s ease-in-out;
+}
+
+.search-form button {
+  width: 80%;
+  padding: 0.5rem;
+  font-size: 1.8rem;
+  background-color: transparent;
+  box-shadow: 2px 2px 2px #000;
 }
 
 .search-location--container {

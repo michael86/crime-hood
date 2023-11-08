@@ -34,15 +34,22 @@ const SearchField = () => {
   };
 
   return (
-    <form onSubmit={onSubmit}>
-      <div className="input-container">
-        <input
-          type={"text"}
-          placeholder="Search for town or city"
-          ref={inputRef}
-        />
+    <>
+      <form onSubmit={onSubmit} className="search-form">
+        <div className="input-container">
+          <input
+            type={"text"}
+            ref={inputRef}
+            name="search"
+            id="search"
+            placeholder=" "
+          />
+          <label htmlFor="search">Search for Town/City/Postcode</label>
+        </div>
+
         <button type="submit">Search</button>
-      </div>
+      </form>
+
       {warning && <h3 className="input-warning">{warning}</h3>}
 
       {searchLocations && (
@@ -56,7 +63,7 @@ const SearchField = () => {
           ))}
         </div>
       )}
-    </form>
+    </>
   );
 };
 
