@@ -13,6 +13,7 @@ const SearchField = () => {
     e.preventDefault();
 
     setWarning(null);
+    setSearchLocations([]);
 
     if (!inputRef.current?.value.length) {
       setWarning("invalid location");
@@ -34,7 +35,7 @@ const SearchField = () => {
   };
 
   return (
-    <>
+    <div className="header--container">
       <form onSubmit={onSubmit} className="search-form">
         <div className="input-container">
           <input
@@ -63,7 +64,7 @@ const SearchField = () => {
           ))}
         </div>
       )}
-    </>
+    </div>
   );
 };
 

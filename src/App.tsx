@@ -10,6 +10,7 @@ const App: React.FC = () => {
 
   const { position, error } = useCurrentPosition();
 
+  console.log(position);
   if (error === undefined && position) {
     dispatch(setLocations([position]));
     dispatch(setLocationShared({ locationShared: true }));
