@@ -1,6 +1,6 @@
 import { useAppDispatch } from "../../app/hooks";
 import { GeoCodeData } from "../../interfaces";
-import { setLocations } from "../slices/locationSlice";
+import { setLocations, setPanTo } from "../slices/locationSlice";
 
 type Props = {
   location: { display_name: string; lat: string; lon: string };
@@ -8,14 +8,15 @@ type Props = {
 };
 
 const SearchCards = ({ location, setSearchLocations }: Props) => {
+  const dispatch = useAppDispatch();
+
   const submitLocation = (lat: number, lng: number) =>
     dispatch(setLocations([[lat, lng]]));
-
-  const dispatch = useAppDispatch();
 
   const onClick = () => {
     submitLocation(+location.lat, +location.lon);
     setSearchLocations([]);
+    dispatch(setPanTo(true));
   };
 
   return (

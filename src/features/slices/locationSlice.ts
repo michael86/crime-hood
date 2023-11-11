@@ -22,6 +22,6 @@ export const LocationsSlice = createSlice({
   },
 });
 
-export const { setLocations } = LocationsSlice.actions;
+export const { setLocations, setPanTo } = LocationsSlice.actions;
 
 export default LocationsSlice.reducer;

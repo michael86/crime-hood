@@ -6,6 +6,7 @@ import ContextMenu from "./ContextMenu";
 import useWindowDimensions, { useAppSelector } from "../../app/hooks";
 import { MapContainer } from "react-leaflet";
 import Sidebar from "./Sidebar";
+import PanTo from "./PanTo";
 
 const Map = () => {
   const locations = useAppSelector((state) => state.locations.geoCoords);
@@ -27,6 +28,7 @@ const Map = () => {
         <UserLocation />
         <MapMarkers />
         <Sidebar />
+        <PanTo />
       </MapContainer>
     </>
   ) : null;

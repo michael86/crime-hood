@@ -27,7 +27,8 @@ export function useCurrentPosition() {
         if (!canceled) {
           setError(error);
         }
-      }
+      },
+      { timeout: 1000 * 5 }
     );
 
     return () => {

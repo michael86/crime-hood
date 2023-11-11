@@ -42,6 +42,10 @@
   left: 1.2rem;
   z-index: 999999;
   border: 2px solid rgba(0, 0, 0, 0.2);
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .hamburger:hover {
@@ -49,9 +53,13 @@
 }
 
 .hamburger--line {
-  width: 90%;
-
-  height: 2px;
-  color: #000;
+  width: 80%;
+  height: 0.2rem;
+  background-color: #000;
   margin: auto;
+  margin-top: 0.5rem;
+}
+
+.hamburger--line:last-of-type {
+  margin-bottom: 0.5rem;
 }
