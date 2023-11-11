@@ -21,6 +21,8 @@ export interface Error {
 
 export interface UserInterface {
   locationShared?: boolean;
+  crimes?: boolean;
+  searches?: boolean;
 }
 
 export interface GeoCodeData {
