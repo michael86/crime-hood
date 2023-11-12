@@ -13,16 +13,13 @@ export const UserSlice = createSlice({
 
   reducers: {
     setLocationShared: (state, action: PayloadAction<UserInterface>) => {
-      state.locationShared = action.payload.locationShared;
-      return state;
+      return { ...state, locationShared: action.payload.locationShared };
     },
     setShowCrimes: (state, action: PayloadAction<boolean>) => {
-      state.crimes = action.payload;
-      return state;
+      return { ...state, crimes: action.payload };
     },
     setShowSearches: (state, action: PayloadAction<boolean>) => {
-      state.searches = action.payload;
-      return state;
+      return { ...state, searches: action.payload };
     },
   },
 });

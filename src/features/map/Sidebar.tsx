@@ -11,9 +11,7 @@ const Sidebar = () => {
   const tl = useRef<GSAPTimeline>();
   const dispatch = useAppDispatch();
 
-  const { crimes: showCrimes, searches: showSearches } = useAppSelector(
-    (state) => state.user
-  );
+  const user = useAppSelector((state) => state.user);
 
   useLayoutEffect(() => {
     if (!ref.current) return;
@@ -54,20 +52,19 @@ const Sidebar = () => {
     setShown(!shown);
   };
 
-  const onFilter = (e: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
+  const onFilter = (e: React.FormEvent<HTMLInputElement>) => {
     const target = e.target as HTMLInputElement;
     e.preventDefault();
     const key = target.getAttribute("name")!;
     const value = target.checked;
 
-    console.log("value", value);
     key === "crimes"
-      ? dispatch(setShowCrimes(!value))
-      : dispatch(setShowSearches(!value));
+      ? dispatch(setShowCrimes(value))
+      : dispatch(setShowSearches(value));
   };
 
-  console.log(showCrimes);
-  console.log(showSearches);
+  console.log("render", typeof user.crimes);
+
   return (
     <>
       <div className="hamburger" onClick={onShow}>
@@ -84,21 +81,23 @@ const Sidebar = () => {
         <li className="sidebar--item">menu item one</li>
         <li className="sidebar--item">
           <input
+            key={Math.random()}
             type="checkbox"
             name="crimes"
             id="show-crimes"
-            onClick={onFilter}
-            checked={showCrimes}
+            onChange={onFilter}
+            defaultChecked={user.crimes}
           />
           <label htmlFor="show-crimes">Show Crimes</label>
         </li>
         <li className="sidebar--item">
           <input
+            key={Math.random()}
             type="checkbox"
             name="searches"
             id="show-searches"
-            onClick={onFilter}
-            checked={showSearches}
+            onChange={onFilter}
+            defaultChecked={user.searches}
           />
           <label htmlFor="show-searches">Show Searches</label>
         </li>

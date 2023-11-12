@@ -14,6 +14,9 @@ const MapMarkers: React.FC = () => {
 
   const { searches, arrests } = useAppSelector((state) => state.crimes);
   const location = useAppSelector((state) => state.locations.geoCoords);
+  const { searches: showSearches, crimes: showCrimes } = useAppSelector(
+    (state) => state.user
+  );
   const [lat, lng] = [...location[0]];
 
   useEffect(() => {
@@ -49,12 +52,14 @@ const MapMarkers: React.FC = () => {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      {searches.map((payload, i) => (
-        <Marker payload={{ searches: payload }} key={i} />
-      ))}
-      {arrests.map((payload, i) => (
-        <Marker payload={{ arrests: payload }} key={i} />
-      ))}
+      {showSearches &&
+        searches.map((payload, i) => (
+          <Marker payload={{ searches: payload }} key={i} />
+        ))}
+      {showCrimes &&
+        arrests.map((payload, i) => (
+          <Marker payload={{ arrests: payload }} key={i} />
+        ))}
     </>
   );
 };
