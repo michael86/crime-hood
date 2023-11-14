@@ -2,22 +2,42 @@ import "./map.css";
 
 import axios from "axios";
 
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 import { TileLayer } from "react-leaflet";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { setArrests, setSearches } from "../slices/crimeSlice";
 import { getCrimes, getStopSearches } from "../../endpoints";
 import Marker from "./Marker";
+import { Arrests, Searches } from "../../interfaces";
 
 const MapMarkers: React.FC = () => {
   const dispatch = useAppDispatch();
+  const firstRender = useRef<boolean>(true);
 
   const { searches, arrests } = useAppSelector((state) => state.crimes);
   const location = useAppSelector((state) => state.locations.geoCoords);
-  const { searches: showSearches, crimes: showCrimes } = useAppSelector(
-    (state) => state.user
-  );
   const [lat, lng] = [...location[0]];
+
+  const {
+    searches: showSearches,
+    crimes: showCrimes,
+    limit,
+  } = useAppSelector((state) => state.user);
+
+  const create2dArray = (data: Arrests[][] | Searches[][]) => {
+    type array = any[][];
+    const copy = [...data].flat();
+    const pages: array = [];
+
+    const counter = 0;
+    const pageIndex = 0;
+    for (let i = 0; i <= copy.length; i++) {
+      pages[pageIndex] = pages[pageIndex] || [];
+      pages[pageIndex].push(copy[i]);
+    }
+
+    return [[{}]];
+  };
 
   useEffect(() => {
     const handleError = () => {
@@ -39,12 +59,24 @@ const MapMarkers: React.FC = () => {
           return;
         }
 
+        const data = limit! > 0 ? create2dArray(res.data) : res.data;
+
         url?.includes("crimes")
           ? dispatch(setArrests(res.data))
           : dispatch(setSearches(res.data));
       });
     });
   }, [location, dispatch, lat, lng]);
+
+  useEffect(() => {
+    if (firstRender.current) {
+      firstRender.current = false;
+      return;
+    }
+    create2dArray(arrests);
+    // dispatch(setArrests(create2dArray(arrests)));
+    // dispatch(setSearches(create2dArray(searches)));
+  }, [limit]);
 
   return (
     <>
@@ -53,11 +85,11 @@ const MapMarkers: React.FC = () => {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       {showSearches &&
-        searches.map((payload, i) => (
+        searches[0].map((payload, i) => (
           <Marker payload={{ searches: payload }} key={i} />
         ))}
       {showCrimes &&
-        arrests.map((payload, i) => (
+        arrests[0].map((payload, i) => (
           <Marker payload={{ arrests: payload }} key={i} />
         ))}
     </>

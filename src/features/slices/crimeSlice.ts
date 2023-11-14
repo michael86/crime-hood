@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { CrimeInterface, Arrests, Searches } from "../../interfaces";
 
-const initialState: CrimeInterface = { arrests: [], searches: [] };
+const initialState: CrimeInterface = { arrests: [[]], searches: [[]] };
 
 export const CrimesSlice = createSlice({
   name: "crime",
@@ -9,11 +9,11 @@ export const CrimesSlice = createSlice({
 
   reducers: {
     setArrests: (state, action: PayloadAction<Arrests[]>) => {
-      state.arrests = action.payload;
+      state.arrests[0] = action.payload;
       return state;
     },
     setSearches: (state, action: PayloadAction<Searches[]>) => {
-      state.searches = action.payload;
+      state.searches[0] = action.payload;
       return state;
     },
   },

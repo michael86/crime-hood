@@ -55,8 +55,8 @@ export interface MarkerProps {
 }
 
 export type CrimeInterface = {
-  arrests: Arrests[] | [];
-  searches: Searches[] | [];
+  arrests: Arrests[][] | [][];
+  searches: Searches[][] | [][];
 };
 
 export interface Arrests {
