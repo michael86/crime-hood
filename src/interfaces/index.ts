@@ -23,6 +23,7 @@ export interface UserInterface {
   locationShared?: boolean;
   crimes?: boolean;
   searches?: boolean;
+  limit?: number;
 }
 
 export interface GeoCodeData {

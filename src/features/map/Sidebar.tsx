@@ -2,7 +2,7 @@ import { useRef, useState, useLayoutEffect } from "react";
 import { useMap } from "react-leaflet";
 import { gsap } from "gsap";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { setShowCrimes, setShowSearches } from "../slices/userSlice";
+import { setLimit, setShowCrimes, setShowSearches } from "../slices/userSlice";
 
 const Sidebar = () => {
   const map = useMap();
@@ -63,7 +63,8 @@ const Sidebar = () => {
       : dispatch(setShowSearches(value));
   };
 
-  console.log("render", typeof user.crimes);
+  const onLimit = (e: React.ChangeEvent<HTMLSelectElement>) =>
+    dispatch(setLimit(+e.target.value));
 
   return (
     <>
@@ -78,7 +79,17 @@ const Sidebar = () => {
           <span className="close--line"></span>
           <span className="close--line"></span>
         </li>
-        <li className="sidebar--item">menu item one</li>
+
+        <li className="sidebar--item">
+          <label htmlFor="limit">Amount to Show</label>
+          <select name="limit" id="limit" onChange={onLimit}>
+            <option value="0">All</option>
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+          </select>
+        </li>
+
         <li className="sidebar--item">
           <input
             key={Math.random()}

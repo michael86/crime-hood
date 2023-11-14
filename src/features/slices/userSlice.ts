@@ -5,6 +5,7 @@ const initialState: UserInterface = {
   locationShared: false,
   crimes: true,
   searches: true,
+  limit: 0,
 };
 
 export const UserSlice = createSlice({
@@ -21,10 +22,13 @@ export const UserSlice = createSlice({
     setShowSearches: (state, action: PayloadAction<boolean>) => {
       return { ...state, searches: action.payload };
     },
+    setLimit: (state, action: PayloadAction<number>) => {
+      return { ...state, limit: action.payload };
+    },
   },
 });
 
-export const { setLocationShared, setShowCrimes, setShowSearches } =
+export const { setLocationShared, setShowCrimes, setShowSearches, setLimit } =
   UserSlice.actions;
 
 export default UserSlice.reducer;
