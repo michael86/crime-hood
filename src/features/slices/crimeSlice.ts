@@ -8,12 +8,12 @@ export const CrimesSlice = createSlice({
   initialState,
 
   reducers: {
-    setArrests: (state, action: PayloadAction<Arrests[]>) => {
-      state.arrests[0] = action.payload;
+    setArrests: (state, action: PayloadAction<Arrests[][]>) => {
+      state.arrests = action.payload;
       return state;
     },
-    setSearches: (state, action: PayloadAction<Searches[]>) => {
-      state.searches[0] = action.payload;
+    setSearches: (state, action: PayloadAction<Searches[][]>) => {
+      state.searches = action.payload;
       return state;
     },
   },

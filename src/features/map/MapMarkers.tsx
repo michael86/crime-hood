@@ -2,19 +2,21 @@ import "./map.css";
 
 import axios from "axios";
 
-import { useEffect, useLayoutEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import { TileLayer } from "react-leaflet";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { setArrests, setSearches } from "../slices/crimeSlice";
 import { getCrimes, getStopSearches } from "../../endpoints";
 import Marker from "./Marker";
 import { Arrests, Searches } from "../../interfaces";
+import { Type } from "typescript";
 
 const MapMarkers: React.FC = () => {
   const dispatch = useAppDispatch();
-  const firstRender = useRef<boolean>(true);
+  const [apiCalled, setApiCalled] = useState<boolean>(false);
 
   const { searches, arrests } = useAppSelector((state) => state.crimes);
+
   const location = useAppSelector((state) => state.locations.geoCoords);
   const [lat, lng] = [...location[0]];
 
@@ -24,19 +26,34 @@ const MapMarkers: React.FC = () => {
     limit,
   } = useAppSelector((state) => state.user);
 
-  const create2dArray = (data: Arrests[][] | Searches[][]) => {
-    type array = any[][];
-    const copy = [...data].flat();
-    const pages: array = [];
+  const create2dArray = <T,>(data: T[][]): T[][] => {
+    const copy: T[] = [];
 
-    const counter = 0;
-    const pageIndex = 0;
-    for (let i = 0; i <= copy.length; i++) {
-      pages[pageIndex] = pages[pageIndex] || [];
-      pages[pageIndex].push(copy[i]);
+    for (const index in data) {
+      for (const entry of data[index]) {
+        copy.push(entry);
+      }
     }
 
-    return [[{}]];
+    if (!copy.length) return [[]];
+
+    const pages: T[][] = [];
+
+    let counter = 0;
+    let pageIndex = 0;
+
+    for (let i = 0; i < copy.length; i++) {
+      pages[pageIndex] = pages[pageIndex] || [];
+      pages[pageIndex].push(copy[i]);
+      counter++;
+
+      if (limit !== 0 && counter >= limit!) {
+        pageIndex++;
+        counter = 0;
+      }
+    }
+
+    return pages;
   };
 
   useEffect(() => {
@@ -59,24 +76,29 @@ const MapMarkers: React.FC = () => {
           return;
         }
 
-        const data = limit! > 0 ? create2dArray(res.data) : res.data;
+        /**as we fetch the data here, we create our 2d array based on the limit.
+         * however, we're unsure on the type res.data contains: Arrests|Searches
+         *  so type narrow using the url when dispatching to the store
+         */
+        const data = limit! > 0 ? create2dArray([res.data]) : [res.data];
 
         url?.includes("crimes")
-          ? dispatch(setArrests(res.data))
-          : dispatch(setSearches(res.data));
+          ? dispatch(setArrests(data))
+          : dispatch(setSearches(data));
+
+        setApiCalled(true);
       });
     });
   }, [location, dispatch, lat, lng]);
 
   useEffect(() => {
-    if (firstRender.current) {
-      firstRender.current = false;
-      return;
-    }
-    create2dArray(arrests);
-    // dispatch(setArrests(create2dArray(arrests)));
-    // dispatch(setSearches(create2dArray(searches)));
-  }, [limit]);
+    if (!apiCalled) return;
+    const getArrays = async () => {
+      dispatch(setArrests(create2dArray<Arrests>(arrests)));
+      dispatch(setSearches(create2dArray<Searches>(searches)));
+    };
+    getArrays();
+  }, [limit, apiCalled]);
 
   return (
     <>
@@ -85,12 +107,14 @@ const MapMarkers: React.FC = () => {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       {showSearches &&
+        Array.isArray(searches[0]) &&
         searches[0].map((payload, i) => (
-          <Marker payload={{ searches: payload }} key={i} />
+          <Marker payload={{ searches: payload, key: "search" }} key={i} />
         ))}
       {showCrimes &&
+        Array.isArray(arrests[0]) &&
         arrests[0].map((payload, i) => (
-          <Marker payload={{ arrests: payload }} key={i} />
+          <Marker payload={{ arrests: payload, key: "arrest" }} key={i} />
         ))}
     </>
   );

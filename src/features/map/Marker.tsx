@@ -1,5 +1,5 @@
 import { Marker as M, Popup } from "react-leaflet";
-import { MarkerProps } from "../../interfaces";
+import { Arrests, MarkerProps, Searches } from "../../interfaces";
 import { icon } from "leaflet";
 import ArrestPopup from "./ArrestPopup";
 import SearchPopup from "./SearchPopup";
@@ -18,15 +18,34 @@ const magnifying = icon({
 });
 
 const Marker = ({ payload }: MarkerProps) => {
-  const data = payload.arrests || payload.searches!;
+  let data: Arrests | Searches, icon;
 
-  const icon = payload.arrests ? handcuff : magnifying;
+  switch (payload.key) {
+    case "arrest":
+      data = payload.arrests!;
+      icon = handcuff;
+      break;
+    case "search":
+      data = payload.searches!;
+      icon = magnifying;
+      break;
+    default:
+      break;
+  }
 
+  // console.log("adding marker");
   return (
-    <M position={[+data.location?.latitude, +data.location?.longitude]} icon={icon}>
+    <M
+      position={[+data!.location?.latitude, +data!.location?.longitude]}
+      icon={icon}
+      key={Math.random()}
+    >
       <Popup className="popup">
-        {payload.arrests && <ArrestPopup payload={payload.arrests} />}
-        {payload.searches && <SearchPopup payload={payload.searches} />}
+        {payload.key === "arrest" ? (
+          <ArrestPopup payload={payload.arrests} />
+        ) : (
+          <SearchPopup payload={payload.searches} />
+        )}
       </Popup>
     </M>
   );

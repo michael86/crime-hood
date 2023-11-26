@@ -51,7 +51,9 @@ export interface ArrestPopupProps {
 }
 
 export interface MarkerProps {
-  payload: { arrests?: Arrests; searches?: Searches };
+  payload:
+    | { key: "arrest"; arrests: Arrests }
+    | { key: "search"; searches: Searches };
 }
 
 export type CrimeInterface = {
@@ -60,6 +62,7 @@ export type CrimeInterface = {
 };
 
 export interface Arrests {
+  key?: "arrest";
   category: string;
   context: string;
   id: number;
@@ -76,6 +79,7 @@ export interface Arrests {
 }
 
 export interface Searches {
+  key?: "search";
   age_range: string | null;
   datetime: string;
   gender: string | null;
