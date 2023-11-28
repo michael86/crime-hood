@@ -1,0 +1,22 @@
+.page-select--container > ul {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  list-style: none;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.page-select--container > ul > li {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border: 0.1rem solid black;
+  box-shadow: 2px 2px 2px #000;
+}
+
+.page-select--container > ul > li:hover {
+  cursor: pointer;
+  transform: translateY(0.2rem);
+  box-shadow: none;
+}

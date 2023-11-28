@@ -24,6 +24,7 @@ const MapMarkers: React.FC = () => {
     searches: showSearches,
     crimes: showCrimes,
     limit,
+    page,
   } = useAppSelector((state) => state.user);
 
   const create2dArray = <T,>(data: T[][]): T[][] => {
@@ -100,6 +101,11 @@ const MapMarkers: React.FC = () => {
     getArrays();
   }, [limit, apiCalled]);
 
+  //if index of page doesn't exists on either array due to array length of sibling beingout of bounds, then need to set to last of index
+
+  const searchPage = searches[page!] ? page! : searches.length - 1;
+  const arrestsPage = arrests[page!] ? page! : arrests.length - 1;
+
   return (
     <>
       <TileLayer
@@ -107,13 +113,11 @@ const MapMarkers: React.FC = () => {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       {showSearches &&
-        Array.isArray(searches[0]) &&
-        searches[0].map((payload, i) => (
+        searches[searchPage!].map((payload, i) => (
           <Marker payload={{ searches: payload, key: "search" }} key={i} />
         ))}
       {showCrimes &&
-        Array.isArray(arrests[0]) &&
-        arrests[0].map((payload, i) => (
+        arrests[arrestsPage!].map((payload, i) => (
           <Marker payload={{ arrests: payload, key: "arrest" }} key={i} />
         ))}
     </>

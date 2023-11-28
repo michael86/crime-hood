@@ -33,7 +33,6 @@ const Marker = ({ payload }: MarkerProps) => {
       break;
   }
 
-  // console.log("adding marker");
   return (
     <M
       position={[+data!.location?.latitude, +data!.location?.longitude]}

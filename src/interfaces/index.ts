@@ -24,6 +24,7 @@ export interface UserInterface {
   crimes?: boolean;
   searches?: boolean;
   limit?: number;
+  page?: number;
 }
 
 export interface GeoCodeData {
