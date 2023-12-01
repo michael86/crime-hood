@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { UserInterface } from "../../interfaces";
+import { UserInterface, Date as D } from "../../interfaces";
 
 const initialState: UserInterface = {
   locationShared: false,
@@ -7,6 +7,7 @@ const initialState: UserInterface = {
   searches: true,
   limit: 0,
   page: 0,
+  date: {},
 };
 
 export const UserSlice = createSlice({
@@ -29,6 +30,9 @@ export const UserSlice = createSlice({
     setPage: (state, action: PayloadAction<number>) => {
       return { ...state, page: action.payload };
     },
+    setDate: (state, action: PayloadAction<D>) => {
+      return { ...state, date: { ...action.payload } };
+    },
   },
 });
 
@@ -38,6 +42,7 @@ export const {
   setShowSearches,
   setLimit,
   setPage,
+  setDate,
 } = UserSlice.actions;
 
 export default UserSlice.reducer;

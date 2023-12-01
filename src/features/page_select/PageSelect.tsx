@@ -12,6 +12,7 @@ const PageSelect = () => {
     arrests.length > searches.length ? arrests.length : searches.length;
 
   const dispatchPage = (page: number) => dispatch(setPage(page));
+
   return pageCount > 1 ? (
     <div className="page-select--container">
       <ul>

@@ -102,7 +102,6 @@ const MapMarkers: React.FC = () => {
   }, [limit, apiCalled]);
 
   //if index of page doesn't exists on either array due to array length of sibling beingout of bounds, then need to set to last of index
-
   const searchPage = searches[page!] ? page! : searches.length - 1;
   const arrestsPage = arrests[page!] ? page! : arrests.length - 1;
 

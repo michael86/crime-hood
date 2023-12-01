@@ -19,12 +19,18 @@ export interface Error {
   TIMEOUT?: number;
 }
 
+export interface Date {
+  month?: number;
+  year?: number;
+}
+
 export interface UserInterface {
   locationShared?: boolean;
   crimes?: boolean;
   searches?: boolean;
   limit?: number;
   page?: number;
+  date?: Date;
 }
 
 export interface GeoCodeData {

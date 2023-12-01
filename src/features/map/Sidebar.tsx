@@ -1,12 +1,18 @@
-import { useRef, useState, useLayoutEffect } from "react";
+import React, { useRef, useState, useLayoutEffect } from "react";
 import { useMap } from "react-leaflet";
 import { gsap } from "gsap";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { setLimit, setShowCrimes, setShowSearches } from "../slices/userSlice";
+import {
+  setDate,
+  setLimit,
+  setShowCrimes,
+  setShowSearches,
+} from "../slices/userSlice";
 
 const Sidebar = () => {
   const map = useMap();
   const [shown, setShown] = useState<boolean>(false);
+
   const ref = useRef<HTMLUListElement>(null);
   const tl = useRef<GSAPTimeline>();
   const dispatch = useAppDispatch();
@@ -66,6 +72,30 @@ const Sidebar = () => {
   const onLimit = (e: React.ChangeEvent<HTMLSelectElement>) =>
     dispatch(setLimit(+e.target.value));
 
+  const getCurrentMonth = (): string => {
+    const date = new Date();
+    return `${date.getFullYear()}-${date.getMonth() + 1}`;
+  };
+
+  console.log("user.daye", user.date);
+  console.log("user.daye", typeof user.date);
+  const [currentDate, setCurrentDate] = useState<string>(
+    Object.keys(user.date!).length > 0
+      ? `${user.date!.year}-${user.date!.month}`
+      : getCurrentMonth()
+  ); //Need to put this back up top once util file created
+
+  const dispatchDate = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const { value } = e.target;
+    setCurrentDate(value);
+
+    const date = new Date(value);
+    const month = date.getMonth();
+    const year = date.getFullYear();
+    dispatch(setDate({ month, year }));
+  };
+
   return (
     <>
       <div className="hamburger" onClick={onShow}>
@@ -112,7 +142,16 @@ const Sidebar = () => {
           />
           <label htmlFor="show-searches">Show Searches</label>
         </li>
-        <li className="sidebar--item">menu item four</li>
+        <li className="sidebar--item">
+          <label htmlFor="date-range"></label>
+          <input
+            type="month"
+            name="date-range"
+            id="date-range"
+            value={currentDate}
+            onChange={dispatchDate}
+          />
+        </li>
       </ul>
     </>
   );
