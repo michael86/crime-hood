@@ -1,23 +1,22 @@
 import React, { useRef, useState, useLayoutEffect } from "react";
-import { useMap } from "react-leaflet";
 import { gsap } from "gsap";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import {
-  setDate,
-  setLimit,
-  setShowCrimes,
-  setShowSearches,
-} from "../slices/userSlice";
+import { setDate, setLimit, setShowCrimes, setShowSearches } from "../slices/userSlice";
+import { getCurrentMonth } from "./utils";
 
 const Sidebar = () => {
-  const map = useMap();
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.user);
+
   const [shown, setShown] = useState<boolean>(false);
+  const [currentDate, setCurrentDate] = useState<string>(
+    Object.keys(user.date!).length > 0
+      ? `${user.date!.year}-${user.date!.month}`
+      : (getCurrentMonth(false) as string)
+  );
 
   const ref = useRef<HTMLUListElement>(null);
   const tl = useRef<GSAPTimeline>();
-  const dispatch = useAppDispatch();
-
-  const user = useAppSelector((state) => state.user);
 
   useLayoutEffect(() => {
     if (!ref.current) return;
@@ -64,24 +63,10 @@ const Sidebar = () => {
     const key = target.getAttribute("name")!;
     const value = target.checked;
 
-    key === "crimes"
-      ? dispatch(setShowCrimes(value))
-      : dispatch(setShowSearches(value));
+    key === "crimes" ? dispatch(setShowCrimes(value)) : dispatch(setShowSearches(value));
   };
 
-  const onLimit = (e: React.ChangeEvent<HTMLSelectElement>) =>
-    dispatch(setLimit(+e.target.value));
-
-  const getCurrentMonth = (): string => {
-    const date = new Date();
-    return `${date.getFullYear()}-${date.getMonth() + 1}`;
-  };
-
-  const [currentDate, setCurrentDate] = useState<string>(
-    Object.keys(user.date!).length > 0
-      ? `${user.date!.year}-${user.date!.month}`
-      : getCurrentMonth()
-  ); //Need to put this back up top once util file created
+  const onLimit = (e: React.ChangeEvent<HTMLSelectElement>) => dispatch(setLimit(+e.target.value));
 
   const dispatchDate = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();

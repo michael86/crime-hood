@@ -1,4 +1,3 @@
-import { ReactElement } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 
 import "./page_select.css";

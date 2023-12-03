@@ -1,6 +1,5 @@
 import { getStopSearches, getCrimes } from "../../../endpoints";
-import axios from "axios";
-import { Searches, Arrests } from "../../../interfaces";
+import axios, { AxiosError } from "axios";
 
 export const create2dArray = <T>(data: T[][], limit: number): T[][] => {
   const copy: T[] = [];
@@ -42,31 +41,47 @@ const handleError = (error: number) =>
     ? [{ key: "error", data: "api down" }]
     : [{ key: "error", data: `unknown status ${error}` }];
 
-export const getData = async <T>(
-  lat: number,
-  lng: number,
-  date: { year: number; month: number }
-) => {
+export const getData = async (lat: number, lng: number, date: { year: number; month: number }) => {
   const _date = Object.keys(date!).length > 0 ? `${date?.year}-${date?.month}` : undefined;
+
+  console.log(_date);
 
   const requests = [getStopSearches(lat, lng, _date), getCrimes(lat, lng, _date)].map((url) =>
     axios.get(url)
   );
 
-  const res = await axios.all(requests);
+  try {
+    const res = await axios.all(requests);
+    const retval = res.map((res) => {
+      if (res.status === 404) console.log("yeet");
+      if (res.status !== 200) return handleError(0);
 
-  const retval = res.map((res) => {
-    if (res.status !== 200) return handleError(0);
+      const { url } = res.config;
 
-    const { url } = res.config;
+      if (!url) return handleError(1);
 
-    if (!url) return handleError(1);
+      return {
+        key: url?.includes("crimes") ? "arrests" : "searches",
+        data: [res.data],
+      };
+    });
 
-    return {
-      key: url?.includes("crimes") ? "arrests" : "searches",
-      data: [res.data],
-    };
-  });
+    return retval;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      return error.status === 404 || error.status === 502 ? "not found" : `new error ${error}`;
+    }
+  }
+};
 
-  return retval;
+/**
+ * @param obj optional boolean to return as object
+ * @returns string: 'YYYY-MM' || {year: number, month: number}
+ */
+export const getCurrentMonth = (obj: boolean) => {
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  if (!obj) return `${year}-${month}`;
+  return { year, month };
 };

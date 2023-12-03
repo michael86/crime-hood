@@ -105,3 +105,16 @@
 .sidebar--close .close--line:last-of-type {
   transform: rotate(-45deg);
 }
+
+.error--container {
+  position: relative;
+  top: 10rem;
+  z-index: 999999999999;
+}
+
+.error--title {
+  font-size: 2rem;
+  background-color: rgba(0, 0, 0, 0.493);
+  padding: 0.5rem;
+  color: #fff;
+}
