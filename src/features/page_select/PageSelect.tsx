@@ -8,8 +8,7 @@ const PageSelect = () => {
   const dispatch = useAppDispatch();
   const { arrests, searches } = useAppSelector((state) => state.crimes);
 
-  const pageCount =
-    arrests.length > searches.length ? arrests.length : searches.length;
+  const pageCount = arrests.length > searches.length ? arrests.length : searches.length;
 
   const dispatchPage = (page: number) => dispatch(setPage(page));
 
@@ -17,7 +16,9 @@ const PageSelect = () => {
     <div className="page-select--container">
       <ul>
         {Array.from(Array(pageCount)).map((_, i) => (
-          <li onClick={() => dispatchPage(i)}>{i + 1}</li>
+          <li onClick={() => dispatchPage(i)} key={i}>
+            {i + 1}
+          </li>
         ))}
       </ul>
     </div>

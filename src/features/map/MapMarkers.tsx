@@ -14,7 +14,7 @@ import { create2dArray, getData } from "./utils";
 const MapMarkers: React.FC = () => {
   const dispatch = useAppDispatch();
   const [apiCalled, setApiCalled] = useState<boolean>(false);
-
+  const [error, setError] = useState<boolean>(false);
   const { searches, arrests } = useAppSelector((state) => state.crimes);
 
   const location = useAppSelector((state) => state.locations.geoCoords);
@@ -29,14 +29,37 @@ const MapMarkers: React.FC = () => {
   } = useAppSelector((state) => state.user);
 
   useEffect(() => {
-    const year = date?.year || 2023;
-    const month = date?.month || 6;
-    const data = getData(lat, lng, limit!, { year, month });
+    const _getData = async () => {
+      const year = date?.year || 2023;
+      const month = date?.month || 6;
+      const data = await getData(lat, lng, { year, month });
+      setApiCalled(true);
+
+      data.forEach((payload) => {
+        if ("key" in payload) {
+          let { data } = payload;
+
+          if (limit! > 0) {
+            data =
+              payload.key === "arrests"
+                ? create2dArray<Arrests>(data, limit!)
+                : create2dArray<Searches>(data, limit!);
+          }
+
+          payload.key === "arrests" && dispatch(setArrests(data));
+          payload.key === "searches" && dispatch(setSearches(data));
+          payload.key === "error" && setError(true);
+        }
+      });
+    };
+    _getData();
   }, [location, dispatch, lat, lng]);
 
   useEffect(() => {
     if (!apiCalled) return;
     const getArrays = async () => {
+      console.log("limit changed");
+
       dispatch(setArrests(create2dArray<Arrests>(arrests, limit!)));
       dispatch(setSearches(create2dArray<Searches>(searches, limit!)));
     };

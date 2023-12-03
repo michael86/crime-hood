@@ -32,45 +32,41 @@ export const create2dArray = <T>(data: T[][], limit: number): T[][] => {
   return pages;
 };
 
+/**
+ *
+ * @param error takes in number
+ * @returns Array [{key: 'error', data: 'error message', status: number}]
+ */
+const handleError = (error: number) =>
+  error === 0
+    ? [{ key: "error", data: "api down" }]
+    : [{ key: "error", data: `unknown status ${error}` }];
+
 export const getData = async <T>(
   lat: number,
   lng: number,
-  limit: number,
   date: { year: number; month: number }
-): Promise<{ key: string; data: [T] | undefined }> => {
-  const handleError = () => {
-    console.log("error");
-  };
+) => {
+  const _date = Object.keys(date!).length > 0 ? `${date?.year}-${date?.month}` : undefined;
 
-  const _date =
-    Object.keys(date!).length > 0 ? `${date?.year}-${date?.month}` : undefined;
-
-  const requests = [
-    getStopSearches(lat, lng, _date),
-    getCrimes(lat, lng, _date),
-  ].map((url) => axios.get(url));
+  const requests = [getStopSearches(lat, lng, _date), getCrimes(lat, lng, _date)].map((url) =>
+    axios.get(url)
+  );
 
   const res = await axios.all(requests);
 
-  const data = res.map((res) => {
-    if (res.status !== 200) return { key: "error", data: undefined };
+  const retval = res.map((res) => {
+    if (res.status !== 200) return handleError(0);
 
     const { url } = res.config;
 
-    if (res.status !== 200) {
-      handleError();
-      return;
-    }
+    if (!url) return handleError(1);
 
-    /**as we fetch the data here, we create our 2d array based on the limit.
-     * however, we're unsure on the type res.data contains: Arrests|Searches
-     *  so type narrow using the url when dispatching to the store
-     */
     return {
-      key: url?.includes("crimes") ? "crimes" : "searches",
-      data: limit > 0 ? create2dArray([res.data], limit) : [res.data],
+      key: url?.includes("crimes") ? "arrests" : "searches",
+      data: [res.data],
     };
   });
 
-  return data;
+  return retval;
 };
