@@ -77,8 +77,6 @@ const Sidebar = () => {
     return `${date.getFullYear()}-${date.getMonth() + 1}`;
   };
 
-  console.log("user.daye", user.date);
-  console.log("user.daye", typeof user.date);
   const [currentDate, setCurrentDate] = useState<string>(
     Object.keys(user.date!).length > 0
       ? `${user.date!.year}-${user.date!.month}`

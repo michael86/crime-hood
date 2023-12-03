@@ -9,7 +9,7 @@ import { setArrests, setSearches } from "../slices/crimeSlice";
 import { getCrimes, getStopSearches } from "../../endpoints";
 import Marker from "./Marker";
 import { Arrests, Searches } from "../../interfaces";
-import { Type } from "typescript";
+import { create2dArray, getData } from "./utils";
 
 const MapMarkers: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -25,78 +25,20 @@ const MapMarkers: React.FC = () => {
     crimes: showCrimes,
     limit,
     page,
+    date,
   } = useAppSelector((state) => state.user);
 
-  const create2dArray = <T,>(data: T[][]): T[][] => {
-    const copy: T[] = [];
-
-    for (const index in data) {
-      for (const entry of data[index]) {
-        copy.push(entry);
-      }
-    }
-
-    if (!copy.length) return [[]];
-
-    const pages: T[][] = [];
-
-    let counter = 0;
-    let pageIndex = 0;
-
-    for (let i = 0; i < copy.length; i++) {
-      pages[pageIndex] = pages[pageIndex] || [];
-      pages[pageIndex].push(copy[i]);
-      counter++;
-
-      if (limit !== 0 && counter >= limit!) {
-        pageIndex++;
-        counter = 0;
-      }
-    }
-
-    return pages;
-  };
-
   useEffect(() => {
-    const handleError = () => {
-      console.log("error");
-    };
-
-    const requests = [getStopSearches(lat, lng), getCrimes(lat, lng)].map(
-      (url) => axios.get(url)
-    );
-
-    axios.all(requests).then((response) => {
-      response.forEach((res) => {
-        if (res.status !== 200) return;
-
-        const { url } = res.config;
-
-        if (res.status !== 200) {
-          handleError();
-          return;
-        }
-
-        /**as we fetch the data here, we create our 2d array based on the limit.
-         * however, we're unsure on the type res.data contains: Arrests|Searches
-         *  so type narrow using the url when dispatching to the store
-         */
-        const data = limit! > 0 ? create2dArray([res.data]) : [res.data];
-
-        url?.includes("crimes")
-          ? dispatch(setArrests(data))
-          : dispatch(setSearches(data));
-
-        setApiCalled(true);
-      });
-    });
+    const year = date?.year || 2023;
+    const month = date?.month || 6;
+    const data = getData(lat, lng, limit!, { year, month });
   }, [location, dispatch, lat, lng]);
 
   useEffect(() => {
     if (!apiCalled) return;
     const getArrays = async () => {
-      dispatch(setArrests(create2dArray<Arrests>(arrests)));
-      dispatch(setSearches(create2dArray<Searches>(searches)));
+      dispatch(setArrests(create2dArray<Arrests>(arrests, limit!)));
+      dispatch(setSearches(create2dArray<Searches>(searches, limit!)));
     };
     getArrays();
   }, [limit, apiCalled]);
