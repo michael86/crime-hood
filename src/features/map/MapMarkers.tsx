@@ -34,7 +34,7 @@ const MapMarkers: React.FC = () => {
       if (!year || !month) {
         const date = getCurrentMonth(true) as { year: number; month: number };
         year = date.year;
-        month = date.month;
+        month = date.month - 2;
       }
 
       const data = await getData(lat, lng, { year, month });
