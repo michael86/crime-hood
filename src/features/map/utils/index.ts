@@ -41,14 +41,20 @@ const handleError = (error: number) =>
     ? [{ key: "error", data: "api down" }]
     : [{ key: "error", data: `unknown status ${error}` }];
 
-export const getData = async (lat: number, lng: number, date: { year: number; month: number }) => {
-  const _date = Object.keys(date!).length > 0 ? `${date?.year}-${date?.month}` : undefined;
+export const getData = async (
+  lat: number,
+  lng: number,
+  date: { year: number; month: number }
+) => {
+  const _date =
+    Object.keys(date!).length > 0 ? `${date?.year}-${date?.month}` : undefined;
 
   console.log(_date);
 
-  const requests = [getStopSearches(lat, lng, _date), getCrimes(lat, lng, _date)].map((url) =>
-    axios.get(url)
-  );
+  const requests = [
+    getStopSearches(lat, lng, _date),
+    getCrimes(lat, lng, _date),
+  ].map((url) => axios.get(url));
 
   try {
     const res = await axios.all(requests);
@@ -69,7 +75,9 @@ export const getData = async (lat: number, lng: number, date: { year: number; mo
     return retval;
   } catch (error) {
     if (error instanceof AxiosError) {
-      return error.status === 404 || error.status === 502 ? "not found" : `new error ${error}`;
+      return error.status === 404 || error.status === 502
+        ? "not found"
+        : `new error ${error}`;
     }
   }
 };

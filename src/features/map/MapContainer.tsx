@@ -1,6 +1,5 @@
 import "leaflet-contextmenu";
 import "leaflet-contextmenu/dist/leaflet.contextmenu.css";
-import UserLocation from "./UserLocation";
 import MapMarkers from "./MapMarkers";
 import ContextMenu from "./ContextMenu";
 import useWindowDimensions, { useAppSelector } from "../../app/hooks";
@@ -25,7 +24,6 @@ const Map = () => {
         contextmenuWidth={140}
       >
         <ContextMenu />
-        <UserLocation />
         <MapMarkers />
         <Sidebar />
         <PanTo />
