@@ -6,80 +6,70 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { setArrests, setSearches } from "../slices/crimeSlice";
 import Marker from "./Marker";
 import { Arrests, Searches } from "../../interfaces";
-import { create2dArray, getCurrentMonth, getData } from "./utils";
+import {
+  create2dArray,
+  getCurrentMonth,
+  getData,
+  getPoliceData,
+} from "./utils";
 import Error from "./Error";
 
 const MapMarkers: React.FC = () => {
   const dispatch = useAppDispatch();
 
+  const user = useAppSelector((state) => state.user);
+  const { searches, arrests } = useAppSelector((state) => state.crimes);
+  const location = useAppSelector((state) => state.locations.geoCoords);
+  const [lat, lng] = [...location[0]];
+
   const [apiCalled, setApiCalled] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
 
-  const { searches, arrests } = useAppSelector((state) => state.crimes);
-  const location = useAppSelector((state) => state.locations.geoCoords);
-  const {
-    searches: showSearches,
-    crimes: showCrimes,
-    limit,
-    page,
-    date,
-  } = useAppSelector((state) => state.user);
-  const [lat, lng] = [...location[0]];
-
   useEffect(() => {
-    const _getData = async () => {
-      let year = date?.year;
-      let month = date?.month;
+    (async () => {
+      const data = await getPoliceData(
+        lat,
+        lng,
+        user.date?.year,
+        user.date?.month
+      );
 
-      if (!year || !month) {
-        const date = getCurrentMonth(true) as { year: number; month: number };
-        year = date.year;
-        month = date.month - 2;
-      }
-
-      const data = await getData(lat, lng, { year, month });
-
-      setApiCalled(true);
-
-      if (typeof data === "string") {
-        setError(true);
+      let _error = false;
+      data.forEach((obj) => (_error = obj.key === "error" ? true : false));
+      if (_error) {
+        setError(_error);
         return;
       }
 
-      setError(false);
-      data &&
-        data.forEach((payload) => {
-          if ("key" in payload) {
-            let { data } = payload;
-
-            if (limit! > 0) {
-              data =
-                payload.key === "arrests"
-                  ? create2dArray<Arrests>(data, limit!)
-                  : create2dArray<Searches>(data, limit!);
-            }
-
-            payload.key === "arrests" && dispatch(setArrests(data));
-            payload.key === "searches" && dispatch(setSearches(data));
-            payload.key === "error" && setError(true);
-          }
-        });
-    };
-    _getData();
-  }, [location, dispatch, lat, lng, date]);
+      data.forEach((obj) =>
+        obj.key === "arrests"
+          ? dispatch(setArrests(obj.data as Arrests[][]))
+          : dispatch(setSearches(obj.data as Searches[][]))
+      );
+      console.log(data);
+    })();
+  }, [
+    location,
+    dispatch,
+    lat,
+    lng,
+    user.date?.year,
+    user.date?.year,
+    user.limit,
+  ]);
 
   useEffect(() => {
     if (!apiCalled) return;
     const getArrays = async () => {
-      dispatch(setArrests(create2dArray<Arrests>(arrests, limit!)));
-      dispatch(setSearches(create2dArray<Searches>(searches, limit!)));
+      dispatch(setArrests(create2dArray<Arrests>(arrests, user.limit!)));
+      dispatch(setSearches(create2dArray<Searches>(searches, user.limit!)));
     };
     getArrays();
-  }, [limit, apiCalled]);
+  }, [user.limit, apiCalled]);
 
   //if index of page doesn't exists on either array due to array length of sibling beingout of bounds, then need to set to last of index
-  const searchPage = searches[page!] ? page! : searches.length - 1;
-  const arrestsPage = arrests[page!] ? page! : arrests.length - 1;
+  const searchPage = searches[user.page!] ? user.page! : searches.length - 1;
+  const arrestsPage = arrests[user.page!] ? user.page! : arrests.length - 1;
 
   return (
     <>
@@ -88,12 +78,12 @@ const MapMarkers: React.FC = () => {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       {!error &&
-        showSearches &&
+        user.searches &&
         searches[searchPage!].map((payload, i) => (
           <Marker payload={{ searches: payload, key: "search" }} key={i} />
         ))}
       {!error &&
-        showCrimes &&
+        user.crimes &&
         arrests[arrestsPage!].map((payload, i) => (
           <Marker payload={{ arrests: payload, key: "arrest" }} key={i} />
         ))}

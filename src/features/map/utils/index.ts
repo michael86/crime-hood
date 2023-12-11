@@ -1,6 +1,13 @@
 import { getStopSearches, getCrimes } from "../../../endpoints";
 import axios, { AxiosError } from "axios";
+import { Arrests, Searches } from "../../../interfaces";
 
+/**
+ *
+ * @param data 2D array, must specify type <T>
+ * @param limit int, how many entrys you want in each child array
+ * @returns 2D array
+ */
 export const create2dArray = <T>(data: T[][], limit: number): T[][] => {
   const copy: T[] = [];
 
@@ -92,4 +99,39 @@ export const getCurrentMonth = (obj: boolean) => {
   const month = date.getMonth() + 1;
   if (!obj) return `${year}-${month}`;
   return { year, month };
+};
+
+type GetPoliceData = (
+  lat: number,
+  lng: number,
+  year?: number,
+  month?: number
+) => Promise<
+  (
+    | { key: string; data: (Arrests | Searches)[][] }
+    | { key: string; data: string }
+  )[]
+>;
+
+export const getPoliceData: GetPoliceData = async (lat, lng, year, month) => {
+  if (!year || !month) {
+    const date = getCurrentMonth(true) as { year: number; month: number };
+    year = date.year;
+    month = date.month - 2;
+  }
+
+  const data = await getData(lat, lng, { year, month });
+
+  if (typeof data === "string") return [{ key: "error", data }];
+
+  const retval = data
+    ? data.map((payload) => {
+        if ("key" in payload) {
+          return { key: payload, data: [[data]] };
+        }
+        return { key: "error in getPoliceData map", data: "" };
+      })
+    : [{ key: "error", data: "" }];
+
+  return retval;
 };
