@@ -38,25 +38,33 @@ export const create2dArray = <T>(data: T[][], limit: number): T[][] => {
   return pages;
 };
 
+type HandleError = (error: number) => { key: string; message: string };
 /**
  *
  * @param error takes in number
  * @returns Array [{key: 'error', data: 'error message', status: number}]
  */
-const handleError = (error: number) =>
+const handleError: HandleError = (error: number) =>
   error === 0
-    ? [{ key: "error", data: "api down" }]
-    : [{ key: "error", data: `unknown status ${error}` }];
+    ? { key: "error", message: "api down" }
+    : { key: "error", message: `unknown status ${error}` };
 
-export const getData = async (
+type GetData = (
+  lat: number,
+  lng: number,
+  date: { year: number; month: number }
+) => Promise<
+  | [{ key: "arrests" | "searches"; data: any[] }]
+  | { key: "error"; message: string }
+>;
+
+export const getData: GetData = async (
   lat: number,
   lng: number,
   date: { year: number; month: number }
 ) => {
   const _date =
     Object.keys(date!).length > 0 ? `${date?.year}-${date?.month}` : undefined;
-
-  console.log(_date);
 
   const requests = [
     getStopSearches(lat, lng, _date),
@@ -66,26 +74,30 @@ export const getData = async (
   try {
     const res = await axios.all(requests);
     const retval = res.map((res) => {
-      if (res.status === 404) console.log("yeet");
-      if (res.status !== 200) return handleError(0);
+      if (res.status !== 200) return handleError(0); //[{key, message}]
 
       const { url } = res.config;
 
-      if (!url) return handleError(1);
+      if (!url) return handleError(1); //[{key, message}]
 
-      return {
-        key: url?.includes("crimes") ? "arrests" : "searches",
-        data: [res.data],
-      };
+      /**
+       * ! This breaks retval
+       */
+      // return {
+      //   key: url?.includes("crimes") ? "arrests" : "searches",
+      //   data: [res.data],
+      // }; //[key, data: [[]]]
     });
 
-    return retval;
+    // return retval;
+    return [{ key: "arrests", data: [] }];
   } catch (error) {
     if (error instanceof AxiosError) {
       return error.status === 404 || error.status === 502
-        ? "not found"
-        : `new error ${error}`;
+        ? { key: "error", message: "not found" }
+        : { key: "error", message: `new error ${error}` };
     }
+    return { key: "error", message: "unknown error" };
   }
 };
 
@@ -107,10 +119,7 @@ type GetPoliceData = (
   year?: number,
   month?: number
 ) => Promise<
-  (
-    | { key: string; data: (Arrests | Searches)[][] }
-    | { key: string; data: string }
-  )[]
+  [{ key: string; data: any[][] }] | { key: "error"; message: string }
 >;
 
 export const getPoliceData: GetPoliceData = async (lat, lng, year, month) => {
@@ -122,16 +131,14 @@ export const getPoliceData: GetPoliceData = async (lat, lng, year, month) => {
 
   const data = await getData(lat, lng, { year, month });
 
-  if (typeof data === "string") return [{ key: "error", data }];
+  if (typeof data === "string") return { key: "error", message: data };
 
-  const retval = data
-    ? data.map((payload) => {
-        if ("key" in payload) {
-          return { key: payload, data: [[data]] };
-        }
-        return { key: "error in getPoliceData map", data: "" };
-      })
-    : [{ key: "error", data: "" }];
+  // const retval = data
+  //   ? data.map((payload) =>  { key: payload.key, data: [[data]] })
+  //   : [{ key: "error", message: "returned data was invalid" }];
+
+  if ("message" in retval[0])
+    return { key: retval[0].key, message: retval[0].message };
 
   return retval;
 };
